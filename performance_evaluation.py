@@ -42,6 +42,7 @@ class Evaluation(object):
             profit = []
             price = []
             times = []
+            final_profit = []
             hist_balance = np.random.randn(self.len_of_benchmark, 1)
             hist_cost = np.random.randn(self.len_of_benchmark, 1)
             for i in range(self.n, len(self.prices[0]) - 1, step_i):
@@ -52,6 +53,7 @@ class Evaluation(object):
                     if self.dps[i - self.n] > threshold:
                         position += 1
                         bank_balance -= self.prices[0, i]
+                        final_profit.append(bank_balance - 2000)
                         profit.append(bank_balance - 2000 + position * current_price)
                         price.append(self.prices[0, i])
                         times.append(i)
@@ -59,6 +61,7 @@ class Evaluation(object):
                     if self.dps[i - self.n] < -threshold:
                         position -= 1
                         bank_balance += self.prices[0, i]
+                        final_profit.append(bank_balance - 2000)
                         profit.append(bank_balance - 2000 + position * current_price)
                         price.append(self.prices[0, i])
                         times.append(i)
@@ -66,6 +69,7 @@ class Evaluation(object):
                     if self.dps[i - self.n] > threshold and position <= 0:
                         position += 1
                         bank_balance -= self.prices[0, i]
+                        final_profit.append(bank_balance - 2000)
                         profit.append(bank_balance - 2000 + position * current_price)
                         price.append(self.prices[0, i])
                         times.append(i)
@@ -81,17 +85,20 @@ class Evaluation(object):
             current_price1 = self.prices[0, len(self.prices[0]) - 1]
             if position == 1:
                 bank_balance += current_price1
+                final_profit.append(bank_balance - 2000)
             if position == -1:
                 bank_balance -= current_price1
                 investment += current_price1
-            final_profit = np.random.randn(1, len(profit))
-            final_profit[0] = profit[0]
-            for k in range(1, len(profit)):
-                final_profit[0, k] = final_profit[0, k - 1] + profit[k] - profit[k - 1]
+                final_profit.append(bank_balance - 2000)
+            #final_profit = np.random.randn(1, len(profit))
+            #final_profit[0] = profit[0]
+            #for k in range(1, len(profit)):
+             #   final_profit[0, k] = final_profit[0, k - 1] + profit[k] - profit[k - 1]
             return bank_balance, hist_balance, hist_cost, final_profit, price, times, profit, investment
         else:
             total_profit = []
             avg_profit = []
+            final_profit = []
             for i in range(len(threshold[0])):
                 bank_balance = 2000
                 position = 0
@@ -103,27 +110,25 @@ class Evaluation(object):
                     if self.dps[j - self.n] > threshold[0, i] and position <= 0:
                         position += 1
                         bank_balance -= self.prices[0, j]
-                        profit.append(bank_balance - 2000 + position * current_price)
-                        investment += self.prices[0, j]
+                        final_profit.append(bank_balance - 2000)
                     if self.dps[j - self.n] < -threshold[0, i] and position >= 0:
                         position -= 1
                         bank_balance += self.prices[0, j]
-                        profit.append(bank_balance - 2000 + position * current_price)
+                        final_profit.append(bank_balance - 2000)
                 current_price1 = self.prices[0, len(self.prices[0]) - 1]
                 if position == 1:
                     bank_balance += current_price1
                 if position == -1:
                     bank_balance -= current_price1
-                    investment += current_price1
-                final_profit = np.random.randn(1, len(profit))
-                final_profit[0] = profit[0]
-                profit_sum = 0
-                for k in range(1, len(profit)):
-                    final_profit[0, k] = final_profit[0, k - 1] + profit[k] - profit[k - 1]
-                    profit_sum += profit[k]
-                avg = profit_sum / len(profit)
-                avg_profit.append(avg)
-                total_profit.append(profit_sum)
+                if len(final_profit) > 0:
+                    profit_sum = final_profit[len(final_profit) - 1]
+                    avg = profit_sum / len(final_profit)
+                    avg_profit.append(avg)
+                    total_profit.append(profit_sum)
+                elif len(final_profit) == 0:
+                    avg_profit.append(0)
+                    total_profit.append(0)
+                final_profit = []
             return avg_profit, total_profit
     """
     计算最大回撤率
@@ -172,21 +177,11 @@ class Evaluation(object):
         plt.subplot(121)
         fig = plt.figure()
         ax = fig.add_subplot(111)
-        ax.plot(threshold, self.holding_time, '-b')
-        ax.set_xlabel('threshold')
-        ax.set_ylabel('holding time (blue)')
-        ax2 = ax.twinx()
-        ax2.plot(threshold, self.sample_size, '-k')
-        ax2.set_ylabel('sample size (black)')
-
-        plt.subplot(122)
-        fig = plt.figure()
-        ax = fig.add_subplot(111)
-        ax.plot(threshold, pnl, '-b')
+        ax.plot(threshold[0], pnl[0], '-b')
         ax.set_xlabel('threshold')
         ax.set_ylabel('pnl (blue)')
         ax2 = ax.twinx()
-        ax2.plot(threshold, total_pnl, '-k')
+        ax2.plot(threshold[0], total_pnl[0], '-k')
         ax2.set_ylabel('total pnl (black)')
         plt.show()
 
