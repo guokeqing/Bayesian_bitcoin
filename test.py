@@ -11,7 +11,7 @@ p3 = pd.read_csv('.//p3.csv')
 #p1 = pd.read_csv('.//price4.csv')
 #p2 = pd.read_csv('.//price5.csv')
 #p3 = pd.read_csv('.//price6.csv')
-n = [180, 360, 720]
+n = [90, 180, 360, 720]
 price_reshaped_1 = p1.values.reshape((1, -1))
 price_reshaped_2 = p2.values.reshape((1, -1))
 price_reshaped_3 = p3.values.reshape((1, -1))
@@ -26,7 +26,7 @@ actual_dp = []
 for i in range(len(price_reshaped_3[0]) - 1):
     actual_dp.append(price_reshaped_3[0, i+1] - price_reshaped_3[0, i])
 print(actual_dp)
-eval = Evaluation(price_reshaped_3, 720, p, 2, 0.1, bench, 100, hold, 100, False)
+eval = Evaluation(price_reshaped_3, 720, p, 2, 0.01, bench, hold, 100, True)
 eval.calculate_max_drawdown()
 #delta = eval.visual_account()
 eval.plot_price_and_profit()
