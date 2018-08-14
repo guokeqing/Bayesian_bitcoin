@@ -2,7 +2,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 from empyrical import max_drawdown, alpha_beta
 from matplotlib import rc
-from matplotlib.ticker import MultipleLocator, FormatStrFormatter
 rc('mathtext', default='regular')
 
 
@@ -46,7 +45,7 @@ class Evaluation(object):
             hist_cost = []
             for i in range(self.n, len(self.prices[0]) - 1, step_i):
                 current_price = self.prices[0, i]
-                if self.long_term_invest == True:
+                if self.long_term_invest:
                     if self.dps[i - self.n] > threshold:
                         position += 1
                         bank_balance -= self.prices[0, i]
@@ -112,9 +111,7 @@ class Evaluation(object):
             for i in range(len(threshold[0])):
                 bank_balance = 2000
                 position = 0
-                investment = 0
                 step_i = self.step
-                profit = []
                 for j in range(self.n, len(self.prices[0]) - 1, step_i):
                     current_price = self.prices[0, j]
                     if self.dps[j - self.n] > threshold[0, i] and position <= 0:
@@ -196,17 +193,20 @@ class Evaluation(object):
         plt.show()
 
     def sharpe_ratio(self):
-        trade_price = self.visual_account()[4]
-        point = self.visual_account()[6]
-        C = (trade_price[-1] - trade_price[1]) / (point[-1] - point[1])
-        interval = []
-        sum = np.sum(trade_price)
-        mean = sum / len(trade_price)
+        trade_price = self.visual_account(self.threshold)[4]
+        point = self.visual_account(self.threshold)[6]
+        c = (trade_price[-1] - trade_price[1]) / (point[-1] - point[1])
+        sum_profit = np.sum(trade_price)
+        mean = sum_profit / len(trade_price)
         b = 0
         for i in range(len(trade_price) - 1):
             b += (trade_price[i] - mean) ** 2
-        sharpe_ratio = (sum - C) / b
+        sharpe_ratio = (sum_profit - c) / b
         return sharpe_ratio
 
-    #if __name__ == '__main__':
+    if __name__ == '__main__':
+        import pandas as pd
 
+        p1 = pd.read_csv('.//p1.csv')
+        p2 = pd.read_csv('.//p2.csv')
+        p3 = pd.read_csv('.//p3.csv')
