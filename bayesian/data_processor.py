@@ -44,7 +44,7 @@ class ProcessData:
         num_matrices = len(self.n)
         list_clusters = [[] for k in range(num_matrices)]
         for i in range(num_matrices):
-            generate_clusters = KMeans(n_clusters=self.num_cluster, random_state=20, max_iter=600)
+            generate_clusters = KMeans(n_clusters=self.num_cluster, random_state=25, max_iter=666)
             generate_clusters.fit(time_series[i][0])
             list_clusters[i].append(generate_clusters.cluster_centers_)
         return list_clusters
@@ -62,3 +62,19 @@ class ProcessData:
             list_effective_clusters[i].append(cluster[np.argsort(np.ptp(cluster, axis=1))[-self.num_effective_cluster:]])
 
         return list_effective_clusters
+
+    if __name__ == '__main__':
+        import pandas as pd
+        from data_processor import ProcessData
+
+        p1 = pd.read_csv('.//p1.csv')
+        p2 = pd.read_csv('.//p2.csv')
+        p3 = pd.read_csv('.//p3.csv')
+
+        n = [90, 180, 360, 720]
+        price_reshaped_1 = p1.values.reshape((1, -1))
+        price_reshaped_2 = p2.values.reshape((1, -1))
+        price_reshaped_3 = p3.values.reshape((1, -1))
+        data_pro = ProcessData(price_reshaped_1, n, 100, 20)
+        effective = data_pro.select_effective_clusters()
+        #print(effective)
