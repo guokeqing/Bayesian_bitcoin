@@ -1,7 +1,7 @@
 import pandas as pd
-from data_processor import *
-from bayesian_regression import *
-from performance_evaluation import *
+from bayesian_model.data_processor import ProcessData
+from bayesian_model.bayesian_regression import Prediction
+from bayesian_model.performance_evaluation import Evaluation
 import matplotlib.pyplot as plt
 
 p1 = pd.read_csv('.//p1.csv')

@@ -65,7 +65,7 @@ class ProcessData:
 
     if __name__ == '__main__':
         import pandas as pd
-        from data_processor import ProcessData
+        from bayesian_model.data_processor import ProcessData
 
         p1 = pd.read_csv('.//p1.csv')
         p2 = pd.read_csv('.//p2.csv')
