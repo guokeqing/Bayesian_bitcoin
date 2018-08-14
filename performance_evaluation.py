@@ -176,7 +176,7 @@ class Evaluation(object):
         plt.grid(True)
         plt.show()
 
-    def plot_threshold(self):
+    def plot_threshold_profit(self):
         threshold = np.arange(0.1, 0.2, 0.001).reshape(1, -1)
         temp = self.visual_account(threshold)
         pnl = np.array(temp[0]).reshape((1, -1))
@@ -189,6 +189,21 @@ class Evaluation(object):
         ax.set_ylabel('pnl (blue)')
         ax2 = ax.twinx()
         ax2.plot(threshold[0], total_pnl[0], '-k')
+        ax2.set_ylabel('total pnl (black)')
+        plt.show()
+
+    def plot_threshold_size(self):
+        threshold = np.arange(0.1, 0.2, 0.001).reshape(1, -1)
+        temp = self.visual_account(threshold)
+        holding_size = np.array(temp[3]).reshape(1, -1)
+        sample_size = np.array(temp[2]).reshape(1, -1)
+        fig = plt.figure()
+        ax = fig.add_subplot(111)
+        ax.plot(threshold[0], holding_size[0], '-b')
+        ax.set_xlabel('threshold')
+        ax.set_ylabel('pnl (blue)')
+        ax2 = ax.twinx()
+        ax2.plot(threshold[0], sample_size[0], '-k')
         ax2.set_ylabel('total pnl (black)')
         plt.show()
 
