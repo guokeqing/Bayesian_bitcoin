@@ -1,7 +1,8 @@
+from decimal import *
+
 import numpy as np
 from numpy.linalg import norm
 from sklearn import linear_model
-from decimal import *
 
 
 class Prediction:
@@ -82,8 +83,8 @@ class Prediction:
 
     if __name__ == '__main__':
         import pandas as pd
-        from bayesian.data_processor import ProcessData
-        from bayesian.bayesian_regression import Prediction
+        from bayesian_model.data_processor import ProcessData
+        from bayesian_model.bayesian_regression import Prediction
 
         p1 = pd.read_csv('.//p1.csv')
         p2 = pd.read_csv('.//p2.csv')
