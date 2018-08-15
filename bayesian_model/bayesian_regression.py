@@ -75,7 +75,7 @@ class Prediction:
             delta_p1 = self.bayesian_model(self.price_3[0, i - self.n[0]:i], self.s[0][0])
             delta_p2 = self.bayesian_model(self.price_3[0, i - self.n[1]:i], self.s[1][0])
             delta_p3 = self.bayesian_model(self.price_3[0, i - self.n[2]:i], self.s[2][0])
-            delta_p4 = self.bayesian_model(self.prices[0, i - self.n[3]:i], self.s[3][0])
+            delta_p4 = self.bayesian_model(self.price_3[0, i - self.n[3]:i], self.s[3][0])
             dp = Decimal(w0) + Decimal(w1) * delta_p1 + Decimal(w2) * delta_p2 + Decimal(w3) * delta_p3\
                  + Decimal(w4) * delta_p4
             delta_p.append(float(dp))
