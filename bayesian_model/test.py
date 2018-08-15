@@ -2,11 +2,12 @@ import pandas as pd
 from bayesian_model.data_processor import ProcessData
 from bayesian_model.bayesian_regression import Prediction
 from bayesian_model.performance_evaluation import Evaluation
+import numpy as np
 import matplotlib.pyplot as plt
 
-p1 = pd.read_csv('.//p1.csv')
-p2 = pd.read_csv('.//p2.csv')
-p3 = pd.read_csv('.//p3.csv')
+p1 = pd.read_csv('.//bayesian_model/p1.csv')
+p2 = pd.read_csv('.//bayesian_model/p2.csv')
+p3 = pd.read_csv('.//bayesian_model/p3.csv')
 #def read_data():
 #p1 = pd.read_csv('.//price4.csv')
 #p2 = pd.read_csv('.//price5.csv')
@@ -30,7 +31,8 @@ eval = Evaluation(price_reshaped_3, 720, p, 2, 0.01, bench, hold, 100, True)
 eval.calculate_max_drawdown()
 #delta = eval.visual_account()
 eval.plot_price_and_profit()
-#eval.plot_threshold()
+eval.plot_threshold_size()
+eval.plot_threshold_profit()
 #print(eval.sharpe_ratio())
 
 

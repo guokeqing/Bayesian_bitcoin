@@ -108,25 +108,32 @@ class Evaluation(object):
             total_profit = []
             avg_profit = []
             final_profit = []
+            holding_time = []
+            sample_size = []
             for i in range(len(threshold[0])):
                 bank_balance = 2000
                 position = 0
                 step_i = self.step
+                trade_times = 0
                 for j in range(self.n, len(self.prices[0]) - 1, step_i):
                     current_price = self.prices[0, j]
                     if self.dps[j - self.n] > threshold[0, i] and position <= 0:
                         position += 1
                         bank_balance -= self.prices[0, j]
                         final_profit.append(bank_balance - 2000 + position * current_price)
+                        trade_times += 1
                     if self.dps[j - self.n] < -threshold[0, i] and position >= 0:
                         position -= 1
                         bank_balance += self.prices[0, j]
                         final_profit.append(bank_balance - 2000 + position * current_price)
+                        trade_times += 1
                 current_price1 = self.prices[0, len(self.prices[0]) - 1]
                 if position == 1:
                     bank_balance += current_price1
+                    trade_times += 1
                 if position == -1:
                     bank_balance -= current_price1
+                    trade_times += 1
                 if len(final_profit) > 0:
                     profit_sum = final_profit[len(final_profit) - 1]
                     avg = profit_sum / len(final_profit)
@@ -136,7 +143,10 @@ class Evaluation(object):
                     avg_profit.append(0)
                     total_profit.append(0)
                 final_profit = []
-            return avg_profit, total_profit
+                avg_holding_time = (len(self.prices[0]) - self.n) / trade_times
+                sample_size.append(trade_times)
+                holding_time.append(avg_holding_time)
+            return avg_profit, total_profit, sample_size, holding_time
     """
     计算最大回撤率
     返回最大回撤率，实际收益和按照Beta系数计算的期望收益之间的差额，业绩评价基准收益的总体波动性
