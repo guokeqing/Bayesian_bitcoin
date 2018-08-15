@@ -61,7 +61,7 @@ class ProcessData:
             cluster = clusters[i][0]
             list_effective_clusters[i].append(cluster[np.argsort(np.ptp(cluster, axis=1))[-self.num_effective_cluster:]])
 
-        return list_effective_clusters
+        return list_effective_clusters 
 
     if __name__ == '__main__':
         import pandas as pd
