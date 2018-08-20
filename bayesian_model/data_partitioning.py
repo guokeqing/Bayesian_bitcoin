@@ -25,7 +25,6 @@ if __name__ == '__main__':
     import numpy as np
     from sklearn.model_selection import GridSearchCV
     from sklearn.cluster import KMeans
-    from bayesian_model.data_processor import ProcessData
 
     p = pd.read_csv(".//price4.csv")
     p = p.values.reshape((1, -1))
@@ -35,6 +34,7 @@ if __name__ == '__main__':
     X_train, X_val = test.split_data()
     test2 = Split(p2)
     y_train, y_val = test2.split_data()
+    print(KMeans().get_params())
 
     param_grid = {"n_clusters": [98, 101, 105],
                   "random_state": [25, 19, 31]}
@@ -42,7 +42,7 @@ if __name__ == '__main__':
     for i in range(len(X_train)):
         temp = X_train[i].reshape(-1, 1)
         temp2 = y_train[i].reshape(-1, 1)
-        grid_search.fit(temp, temp2)
+        grid_search.fit(temp)
     print("Best parameters:{}".format(grid_search.best_params_))
 
 
