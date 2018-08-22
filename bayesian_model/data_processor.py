@@ -24,12 +24,12 @@ class ProcessData:
         list_matrix = [[] for k in range(num_of_matrices)]
         for i in range(len(self.n)):
             num_n = self.n[i]
-            num_row = len(self.price_data[0]) - num_n
+            num_row = len(self.price_data) - num_n
             ts = np.empty((num_row, num_n + 1))
 
             for j in range(num_row):
-                ts[j, :num_n] = self.price_data[0, j:j+num_n]
-                ts[j, num_n] = self.price_data[0, j + num_n] - self.price_data[0, j + num_n - 1]
+                ts[j, :num_n] = self.price_data[j:j+num_n]
+                ts[j, num_n] = self.price_data[j + num_n] - self.price_data[j + num_n - 1]
 
             list_matrix[i].append(ts)
 
@@ -61,7 +61,7 @@ class ProcessData:
             cluster = clusters[i][0]
             list_effective_clusters[i].append(cluster[np.argsort(np.ptp(cluster, axis=1))[-self.num_effective_cluster:]])
 
-        return list_effective_clusters 
+        return list_effective_clusters
 
     if __name__ == '__main__':
         import pandas as pd

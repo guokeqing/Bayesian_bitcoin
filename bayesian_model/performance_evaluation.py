@@ -6,6 +6,7 @@ rc('mathtext', default='regular')
 
 
 class Evaluation(object):
+
     def __init__(self, prices, n, dps, step, threshold,
                  benchmark_returns, holding_time, sample_size, long_term_invest):
         """
@@ -43,63 +44,63 @@ class Evaluation(object):
             final_profit = []
             hist_balance = []
             hist_cost = []
-            for i in range(self.n, len(self.prices[0]) - 1, step_i):
-                current_price = self.prices[0, i]
+            for i in range(self.n, len(self.prices) - 1, step_i):
+                current_price = self.prices[i]
                 if self.long_term_invest:
                     if self.dps[i - self.n] > threshold:
                         position += 1
-                        bank_balance -= self.prices[0, i]
+                        bank_balance -= self.prices[i]
                         final_profit.append(bank_balance - 2000 + position * current_price)
                         profit.append(bank_balance - 2000 + position * current_price)
-                        price.append(self.prices[0, i])
+                        price.append(self.prices[i])
                         times.append(i)
-                        hist_cost.append(current_price - final_profit[-1])
-                        investment += self.prices[0, i]
+                        hist_cost.append(current_price - (final_profit[-1] - 2000))
+                        investment += self.prices[i]
                         hist_balance.append(bank_balance)
                     if self.dps[i - self.n] < -threshold:
                         position -= 1
-                        bank_balance += self.prices[0, i]
+                        bank_balance += self.prices[i]
                         final_profit.append(bank_balance - 2000 + position * current_price)
                         profit.append(bank_balance - 2000 + position * current_price)
-                        price.append(self.prices[0, i])
-                        hist_cost.append(current_price - final_profit[-1])
+                        price.append(self.prices[i])
+                        hist_cost.append(current_price - (final_profit[-1] - 2000))
                         hist_balance.append(bank_balance)
                         times.append(i)
                 else:
-                    if self.dps[i - self.n] > threshold and position <= 0:
+                    if self.dps[i - self.n - 1] > threshold and position <= 0:
                         position += 1
-                        bank_balance -= self.prices[0, i]
+                        bank_balance -= self.prices[i]
                         final_profit.append(bank_balance - 2000 + position * current_price)
                         profit.append(bank_balance - 2000 + position * current_price)
-                        price.append(self.prices[0, i])
+                        price.append(self.prices[i])
                         times.append(i)
-                        hist_cost.append(current_price - final_profit[-1])
-                        investment += self.prices[0, i]
+                        hist_cost.append(current_price - (final_profit[-1] - 2000))
+                        investment += self.prices[i]
                         hist_balance.append(bank_balance)
-                    if self.dps[i - self.n] < -threshold and position >= 0:
+                    if self.dps[i - self.n - 1] < -threshold and position >= 0:
                         position -= 1
-                        bank_balance += self.prices[0, i]
+                        bank_balance += self.prices[i]
                         final_profit.append(bank_balance - 2000 + position * current_price)
                         profit.append(bank_balance - 2000 + position * current_price)
-                        price.append(self.prices[0, i])
-                        hist_cost.append(current_price - final_profit[-1])
+                        price.append(self.prices[i])
+                        hist_cost.append(current_price - (final_profit[-1] - 2000))
                         times.append(i)
                         hist_balance.append(bank_balance)
-            current_price1 = self.prices[0, len(self.prices[0]) - 1]
+            current_price1 = self.prices[len(self.prices) - 1]
             if position == 1:
                 bank_balance += current_price1
                 final_profit.append(bank_balance - 2000 + position * current_price1)
-                times.append(len(self.prices[0]))
-                price.append(self.prices[0][-1])
-                hist_cost.append(current_price1 - final_profit[len(final_profit) - 1])
+                times.append(len(self.prices))
+                price.append(self.prices[-1])
+                hist_cost.append(current_price1 - (final_profit[len(final_profit) - 1] - 2000))
                 hist_balance.append(bank_balance)
             elif position == -1:
                 bank_balance -= current_price1
                 investment += current_price1
                 final_profit.append(bank_balance - 2000 + position * current_price1)
-                times.append(len(self.prices[0]))
-                price.append(self.prices[0][-1])
-                hist_cost.append(current_price1 - final_profit[len(final_profit) - 1])
+                times.append(len(self.prices))
+                price.append(self.prices[-1])
+                hist_cost.append(current_price1 - (final_profit[len(final_profit) - 1] - 2000))
                 hist_balance.append(bank_balance)
             else:
                 bank_balance += position * current_price1
@@ -107,43 +108,53 @@ class Evaluation(object):
         else:
             total_profit = []
             avg_profit = []
-            final_profit = []
             holding_time = []
             sample_size = []
             for i in range(len(threshold[0])):
                 bank_balance = 2000
                 position = 0
+                investment = 0
+                times = []
                 step_i = self.step
+                final_profit = []
+                profit = []
                 trade_times = 0
-                for j in range(self.n, len(self.prices[0]) - 1, step_i):
-                    current_price = self.prices[0, j]
+
+                for j in range(self.n, len(self.prices) - 1, step_i):
+                    current_price = self.prices[j]
                     if self.dps[j - self.n] > threshold[0, i] and position <= 0:
                         position += 1
-                        bank_balance -= self.prices[0, j]
-                        final_profit.append(bank_balance - 2000 + position * current_price)
+                        bank_balance -= self.prices[j]
+                        # profit.append(bank_balance - 2000 + position * current_price)
+                        final_profit.append(bank_balance - 2000)
+                        investment += self.prices[j]
                         trade_times += 1
                     if self.dps[j - self.n] < -threshold[0, i] and position >= 0:
                         position -= 1
-                        bank_balance += self.prices[0, j]
-                        final_profit.append(bank_balance - 2000 + position * current_price)
+                        bank_balance += self.prices[j]
+                        # profit.append(bank_balance - 2000 + position * current_price)
+                        final_profit.append(bank_balance - 2000)
                         trade_times += 1
-                current_price1 = self.prices[0, len(self.prices[0]) - 1]
+                current_price1 = self.prices[len(self.prices) - 1]
                 if position == 1:
                     bank_balance += current_price1
+                    final_profit[-1] += current_price1
                     trade_times += 1
                 if position == -1:
                     bank_balance -= current_price1
                     trade_times += 1
-                if len(final_profit) > 0:
-                    profit_sum = final_profit[len(final_profit) - 1]
-                    avg = profit_sum / len(final_profit)
-                    avg_profit.append(avg)
-                    total_profit.append(profit_sum)
-                elif len(final_profit) == 0:
-                    avg_profit.append(0)
-                    total_profit.append(0)
-                final_profit = []
-                avg_holding_time = (len(self.prices[0]) - self.n) / trade_times
+                    final_profit[-1] -= current_price1
+                    investment += current_price1
+                # final_profit = np.random.randn(1, len(profit))
+                # final_profit[0] = profit[0]
+                profit_sum = final_profit[-1]
+                # for k in range(1, len(final_profit)):
+                # final_profit[0, k] = final_profit[0, k - 1] + profit[k] - profit[k - 1]
+                # profit_sum += profit[k]
+                avg = profit_sum / len(final_profit)
+                avg_profit.append(avg)
+                avg_holding_time = (len(self.prices) - self.n) / trade_times
+                total_profit.append(profit_sum)
                 sample_size.append(trade_times)
                 holding_time.append(avg_holding_time)
             return avg_profit, total_profit, sample_size, holding_time
@@ -187,11 +198,13 @@ class Evaluation(object):
         plt.show()
 
     def plot_threshold_profit(self):
+        """
+        画出不同threshold和收益关系图
+        """
         threshold = np.arange(0.1, 0.2, 0.001).reshape(1, -1)
         temp = self.visual_account(threshold)
-        pnl = np.array(temp[0]).reshape((1, -1))
-        total_pnl = np.array(temp[1]).reshape((1, -1))
-        plt.subplot(121)
+        pnl = np.array(temp[0]).reshape(1, -1)
+        total_pnl = np.array(temp[1]).reshape(1, -1)
         fig = plt.figure()
         ax = fig.add_subplot(111)
         ax.plot(threshold[0], pnl[0], '-b')
@@ -203,6 +216,9 @@ class Evaluation(object):
         plt.show()
 
     def plot_threshold_size(self):
+        """
+        画出不同threshold和平均收益关系图
+        """
         threshold = np.arange(0.1, 0.2, 0.001).reshape(1, -1)
         temp = self.visual_account(threshold)
         holding_size = np.array(temp[3]).reshape(1, -1)
@@ -218,6 +234,9 @@ class Evaluation(object):
         plt.show()
 
     def sharpe_ratio(self):
+        """
+        计算夏普比率
+        """
         trade_price = self.visual_account(self.threshold)[4]
         point = self.visual_account(self.threshold)[6]
         c = (trade_price[-1] - trade_price[1]) / (point[-1] - point[1])
@@ -228,6 +247,12 @@ class Evaluation(object):
             b += (trade_price[i] - mean) ** 2
         sharpe_ratio = (sum_profit - c) / b
         return sharpe_ratio
+
+    def fit(self, X, y=None):
+        return self
+
+    def get_params(self):
+        return self.__dict__
 
     if __name__ == '__main__':
         import pandas as pd

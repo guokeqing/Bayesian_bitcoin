@@ -26,5 +26,5 @@ class Test:
         bench = np.random.randn(100, 1)
         hold = np.random.randn(1, 100)
 
-        eval = Evaluation(p_eval, max(n), p, step, threshold, bench, hold, 100, False)
+        eval = Evaluation(p_eval, max(n), p, step, threshold, bench, hold, 100, True)
         return eval.sharpe_ratio(), eval.visual_account(threshold)[0]

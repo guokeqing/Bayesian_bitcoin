@@ -2,13 +2,13 @@ import pandas as pd
 import numpy as np
 from bayesian_model.tuning_test import Test
 
+
 class Tuning:
     def __init__(self, input_data):
         self.input_data = input_data
 
     def find_best_params(self, n_list, n_cluster_list, n_effective_list, step_list, threshold_list):
         max_balance = 0
-        best_sharpe = 0
         for i in range(10):
             index_n_list = np.random.randint(0, len(n_list))
             index_n_cluster = np.random.randint(0, len(n_cluster_list))
@@ -21,8 +21,7 @@ class Tuning:
                                                    n_effective_list[index_n_effective], step_list[index_step],
                                                    threshold_list[index_threshold])
 
-            if balance > max_balance and sharpe_ratio > best_sharpe:
-                best_sharpe = sharpe_ratio
+            if balance > max_balance and sharpe_ratio > 0.3:
                 max_balance = balance
                 best_n_list = n_list[index_n_list]
                 best_n_cluster = n_cluster_list[index_n_cluster]
@@ -34,7 +33,8 @@ class Tuning:
               "    Best number of effective clusters: " + str(best_n_effective) + "    Best step: " + str(best_step) +
               "    Best threshold: " + str(best_threshold))
         return {'Best n_list': best_n_list, 'Best n_clusters': best_n_cluster, 'Best n_effective': best_n_effective,
-                'Best step': best_step, 'Best threshold': best_threshold, 'Balance': balance}
+                'Best step': best_step, 'Best threshold': best_threshold, 'Balance': balance,
+                'Sharpe ratio': sharpe_ratio}
 
 if __name__ == '__main__':
     p = pd.read_csv(".//price4.csv")
