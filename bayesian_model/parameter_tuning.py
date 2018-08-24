@@ -9,6 +9,7 @@ class Tuning:
 
     def find_best_params(self, n_list, n_cluster_list, n_effective_list, step_list, threshold_list):
         max_balance = 0
+        max_sharpe = 0
         for i in range(10):
             index_n_list = np.random.randint(0, len(n_list))
             index_n_cluster = np.random.randint(0, len(n_cluster_list))
@@ -21,8 +22,9 @@ class Tuning:
                                                    n_effective_list[index_n_effective], step_list[index_step],
                                                    threshold_list[index_threshold])
 
-            if balance > max_balance and sharpe_ratio > 0.3:
+            if balance > max_balance and sharpe_ratio > max_sharpe:
                 max_balance = balance
+                max_sharpe = sharpe_ratio
                 best_n_list = n_list[index_n_list]
                 best_n_cluster = n_cluster_list[index_n_cluster]
                 best_n_effective = n_effective_list[index_n_effective]

@@ -1,7 +1,7 @@
-import pandas as pd
 from bayesian_model.data_processor import ProcessData
 from bayesian_model.bayesian_regression import Prediction
 from bayesian_model.performance_evaluation import Evaluation
+from bayesian_model.index import Calculate_index
 import numpy as np
 
 
@@ -26,5 +26,9 @@ class Test:
         bench = np.random.randn(100, 1)
         hold = np.random.randn(1, 100)
 
-        eval = Evaluation(p_eval, max(n), p, step, threshold, bench, hold, 100, True)
-        return eval.sharpe_ratio(), eval.visual_account(threshold)[0]
+        eval_result = Evaluation(p_eval, max(n), p, step, threshold, bench, hold, 100, True, 5000, 5000, 4)
+        returns = eval_result.periodic_return()[0]
+        market = eval_result.periodic_return()[1]
+        temp = Calculate_index(returns, market, 0.2, 0.1, 1, 500, 4)
+        sharpe = temp.sharpe_ratio()
+        return sharpe, eval_result.visual_account(threshold)[0]
