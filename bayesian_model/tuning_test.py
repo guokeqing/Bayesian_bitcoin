@@ -29,6 +29,6 @@ class Test:
         eval_result = Evaluation(p_eval, max(n), p, step, threshold, bench, hold, 100, True, 5000, 5000, 4)
         returns = eval_result.periodic_return()[0]
         market = eval_result.periodic_return()[1]
-        temp = Calculate_index(returns, market, 0.2, 0.1, 1, 500, 4)
+        temp = Calculate_index(returns, market, 0.05, 0.04, 1, 500, 4)
         sharpe = temp.sharpe_ratio()
-        return sharpe, eval_result.visual_account(threshold)[0]
+        return sharpe, eval_result.visual_account(threshold)[0], eval_result.visual_account(threshold)[2]

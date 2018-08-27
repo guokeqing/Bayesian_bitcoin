@@ -123,7 +123,7 @@ class Calculate_index(object):
         # Returns the maximum draw-down for any tau in (0, T) where T is the length of the return series
         max_drawdown = float('-inf')
         for i in range(0, len(self.returns)):
-            drawdown_i = self.dd(i)
+            drawdown_i = self.dd()
             if drawdown_i > max_drawdown:
                 max_drawdown = drawdown_i
         # Max draw-down should be positive

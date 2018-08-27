@@ -92,7 +92,7 @@ class Evaluation(object):
                 times.append(len(self.prices))
             if position < 0:
                 bank_balance += position * current_price
-                cost += position * current_price
+                cost -= position * current_price
                 times.append(len(self.prices))
             final_profit = 0
             for i in range(len(fin_profit)):
@@ -101,7 +101,6 @@ class Evaluation(object):
             return bank_balance, return_rate, fin_profit, prices, times, profit, cost, predicted_dps, actual_dps, costs
         else:
             total_profit = []
-            avg_profit = []
             holding_time = []
             sample_size = []
             fin_profit = []
@@ -243,7 +242,7 @@ class Evaluation(object):
             profit_i = profit[int(period_len*(i+1))]
             cost_i = np.sum(cost[int(period_len*i):int(period_len*(i+1))])
             if cost_i==0:
-                periodic_return=0
+                periodic_return.append(0)
             else:
                 periodic_return.append(profit_i/cost_i)
             price_change = (price[int(period_len*(i+1))]-price[int(period_len*i)])/price[int(period_len*i)]
