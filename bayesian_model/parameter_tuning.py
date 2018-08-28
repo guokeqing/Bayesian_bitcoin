@@ -36,7 +36,7 @@ class Tuning:
                 # "    Best number of effective clusters: " + str(best_n_effective) + "    Best step: " + str(best_step) +
                 # "    Best threshold: " + str(best_threshold))
         return {'Best n_list': best_n_list, 'Best n_clusters': best_n_cluster, 'Best n_effective': best_n_effective,
-                'Best step': best_step, 'Best threshold': best_threshold, 'Balance': balance,
+                'Best step': best_step, 'Best threshold': best_threshold, 'Balance': max_balance,
                 'Sharpe ratio': sharpe_ratio, 'Profit': profit}
 
 
