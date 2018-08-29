@@ -110,18 +110,18 @@ class Evaluation(object):
                 investment = 0
                 step_i = self.step
                 trade_times = 0
-                for j in range(self.n, len(self.prices[0]) - 1, step_i):
-                    current_price = self.prices[0, j]
+                for j in range(self.n, len(self.prices) - 1, step_i):
+                    current_price = self.prices[j]
                     if self.dps[j - self.n] > threshold[0, i] and position <= 0:
                         position += 1
-                        bank_balance -= self.prices[0, j]
-                        investment += self.prices[0, j]
+                        bank_balance -= self.prices[j]
+                        investment += self.prices[j]
                         trade_times += 1
                     if self.dps[j - self.n] < -threshold[0, i] and position >= 0:
                         position -= 1
-                        bank_balance += self.prices[0, j]
+                        bank_balance += self.prices[j]
                         trade_times += 1
-                current_price1 = self.prices[0, len(self.prices[0]) - 1]
+                current_price1 = self.prices[0, len(self.prices) - 1]
                 if position == 1:
                     bank_balance += current_price1
                     final_profit = bank_balance - self.initial_balance
@@ -133,7 +133,7 @@ class Evaluation(object):
                     investment += current_price1
                 fin_profit.append(final_profit)
                 total_profit.append(final_profit)
-                avg_holding_time = (len(self.prices[0]) - self.n) / trade_times
+                avg_holding_time = (len(self.prices) - self.n) / trade_times
                 holding_time.append(avg_holding_time)
                 sample_size.append(trade_times)
             fin_profit = np.array(fin_profit)
