@@ -1,6 +1,6 @@
 # Bayesian_bitcoin
 
-##  Bayesian linear regression model
+##  bayesian_model
 ### data source: https://www.kaggle.com/mikoim/bitcoin-historical-data
    - Bitcoin trading price that get recorded once per minute starting from 2016 to 2018.6
 ### Spliting the data set: 2/3 of the first 20k price data is training set, 1/3 is validation set, the following 20k data is test set
