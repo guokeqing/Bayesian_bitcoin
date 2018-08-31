@@ -9,3 +9,5 @@
 
 - plot functions: plot_price_and_profit, plot_threshold_profit, plot_threshold_size
 - evaluation functions imported from emperical package
+
+![price and profit plot](https://github.com/SophWang/Bayesian_bitcoin/blob/master/bayesian_model/param_adjusted.png)
